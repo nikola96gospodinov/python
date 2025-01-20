@@ -352,6 +352,13 @@ while True:
         else:
             dictionary[word.lower()] = 1
 
+# This line sorts the dictionary by values (word frequencies) in descending order
+# dictionary.items() gets list of (word, count) tuples
+# sorted() sorts them using the key function
+# lambda item: item[1] is an anonymous function that takes each tuple 'item'
+#   and returns item[1] (the count) as the sorting key
+# reverse=True makes it sort in descending order instead of ascending
+# dict() converts the sorted items back into a dictionary
 sorted_dictionary = dict(sorted(dictionary.items(), key=lambda item: item[1], reverse=True))
 
 # Get first item using next() and iter()
