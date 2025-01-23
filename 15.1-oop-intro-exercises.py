@@ -139,4 +139,28 @@ class Product:
         Product.total_products += 1
         Product.total_value += price * quantity
         
-    
+    def restock_product(self, quantity: int):
+        if not isinstance(quantity, int) or quantity < 0:
+            raise ValueError("quantity must be a non-negative integer")
+        
+        self.quantity += quantity
+        Product.total_value += quantity * self.price
+        
+    def sell_product(self):
+        if self.quantity == 0:
+            print("Out of stock")
+            return
+        
+        self.quantity -= 1
+        Product.total_value -= self.price
+        
+    def apply_discount(self, discount: float):
+        if not isinstance(discount, (int, float)) or not 0 < discount < 100:
+            raise ValueError("discount must be a percentage between 0 and 100 (exclusive)")
+        
+        discount_value = discount / 100
+        new_price = (1 - discount_value) * self.price
+        value_difference = (self.price * self.quantity) - (new_price * self.quantity)
+        
+        self.price = new_price
+        Product.total_value -= value_difference
