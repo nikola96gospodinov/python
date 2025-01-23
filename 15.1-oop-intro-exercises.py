@@ -114,3 +114,29 @@ class Student:
             print("No grades at the moment")
         return min([grade["grade"] for grade in self.grades])
         
+class Product:
+    total_products: int = 0
+    total_value: float = 0
+    
+    def __init__(self, name: str, price: float | int, quantity: int, category: str) -> None:
+        if not isinstance(name, str) or name.strip() == "":
+            raise ValueError("name must be a non empty string")
+        
+        if not isinstance(price, (int, float)) or price <= 0:
+            raise ValueError("price must be a positive number")
+        
+        if not isinstance(quantity, int) or quantity < 0:
+            raise ValueError("quantity must be a non-negative integer")
+        
+        if not isinstance(category, str) or category.strip() == "":
+            raise ValueError("category must be a non-empty string")
+        
+        self.name = name
+        self.price = price
+        self.quantity = quantity
+        self.category = category
+        
+        Product.total_products += 1
+        Product.total_value += price * quantity
+        
+    
