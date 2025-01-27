@@ -1,4 +1,8 @@
-from typing import List
+from typing import List, TypedDict
+from datetime import datetime
+import re
+
+email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
 
 class Shape:
     def area(self):
@@ -260,3 +264,245 @@ if __name__ == "__main__":
         print("\n" + calculator.generate_report())
     except (TypeError, ValueError) as e:
         print(f"Error: {e}")
+        
+class PaymentProcessor:
+    def process_payment(self, amount):
+        raise NotImplementedError
+    
+    def refund_payment(self, amount):
+        raise NotImplementedError
+    
+class CreditCardPayment(PaymentProcessor):
+    def __init__(self, card_number, expiry) -> None:
+        super().__init__()
+        self._card_number = "0000000000000000"
+        self._expiry = datetime.now().strftime("%m/%y")
+        
+        self.card_number = card_number
+        self.expiry = expiry
+        
+    @property
+    def card_number(self):
+        return self._card_number
+    
+    @card_number.setter
+    def card_number(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Card number must be a string")
+        if 19 < len(value.replace(" ", "")) < 16:
+            raise ValueError("Card must be between 16 and 19 numbers")
+        if all(char.isalnum() for char in value.replace(" ", "")):
+            raise ValueError("All characters must be numbers")
+        
+        self._card_number = value
+        
+    @property
+    def expiry(self):
+        return self._expiry
+    
+    @expiry.setter
+    def expiry(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Expiry must be a string")
+        if not re.match(r"^(0[1-9]|1[0-2])/([0-9]{2})$", value):
+            raise ValueError("Expiry must be in MM/YY format")
+        
+        expiry_date = datetime.strptime(value, "%m/%y")
+        current_date = datetime.strptime(datetime.now().strftime("%m/%y"), "%m/%y")
+        if expiry_date.date() < current_date.date():
+            raise ValueError("Card has expired")
+        
+        self._expiry = value
+        
+    def process_payment(self, amount):
+        # Get balance from bank through network request
+        balance = 10_000
+        
+        if not isinstance(amount, (float, int)):
+            raise TypeError("Amount needs to be a number")
+        if balance < amount:
+            raise ValueError("Not enough funds")
+        
+        balance -= amount
+        # Update balance thought network request
+        
+    def refund_payment(self, amount):
+        # Get balance from bank through network request
+        balance = 10_000
+        
+        if not isinstance(amount, (float, int)):
+            raise TypeError("Amount needs to be a number")
+        
+        balance += amount
+        # Update balance thought network request
+        
+class PayPalPayment(PaymentProcessor):
+    def __init__(self, email) -> None:
+        super().__init__()
+        self._email = ""
+        
+        self.email = email
+        
+    @property
+    def email(self):
+        return self._email
+    
+    @email.setter
+    def email(self, value):
+        if not isinstance(value, str):
+            raise TypeError("Email must be a string")
+        if not re.match(email_pattern, value):
+            raise ValueError("Make sure you enter a valid email")
+        
+        self._email = value
+        
+    def process_payment(self, amount):
+        # Get balance from PayPal through network request
+        balance = 10_000
+        
+        if not isinstance(amount, (float, int)):
+            raise TypeError("Amount needs to be a number")
+        if balance < amount:
+            raise ValueError("Not enough funds")
+        
+        balance -= amount
+        # Update balance thought network request
+        
+    def refund_payment(self, amount):
+        # Get balance from PayPal through network request
+        balance = 10_000
+        
+        if not isinstance(amount, (float, int)):
+            raise TypeError("Amount needs to be a number")
+        
+        balance += amount
+        # Update balance thought network request
+        
+class NotificationService:
+    def send(self, recipient, message):
+        raise NotImplementedError
+    
+    def validate_recipient(self, recipient):
+        raise NotImplementedError
+    
+class EmailNotification(NotificationService):
+    def __init__(self, email) -> None:
+        super().__init__()
+        self._email = ""
+        
+        self.email = email
+        
+    def validate_recipient(self, recipient: str) -> bool:
+        if not isinstance(recipient, str):
+            raise TypeError("Email must be a string")
+        
+        if not re.match(email_pattern, recipient):
+            raise ValueError("Invalid email format")
+        
+        return True
+        
+    @property
+    def email(self):
+        return self._email
+    
+    @email.setter
+    def email(self, value):
+        self.validate_recipient(value)
+        self._email = value
+        
+    def send(self, recipient, message):
+        try:
+            self.validate_recipient(recipient)
+            
+            # Simulate success
+            print(f"Sending email to: {recipient}")
+            print(f"Message: {message}")
+            
+            return True
+        except (TypeError, ValueError) as error:
+            print(f"Failed to send email: {error}")
+            return False
+        except Exception as error:
+            print(f"Unexpected error sending email: {error}")
+            return False
+    
+class SMSNotification(NotificationService):
+    def __init__(self, phone_number) -> None:
+        super().__init__()
+        self._phone_number = ""
+        
+        self.phone_number = phone_number
+        
+    @property
+    def phone_number(self):
+        return self._phone_number
+    
+    @phone_number.setter
+    def phone_number(self, value):
+        self.validate_recipient(value)
+        self._phone_number = value
+        
+    def validate_recipient(self, recipient: str) -> bool:
+        if not isinstance(recipient, str):
+            raise TypeError("Phone number must be a string")
+        
+        bare_phone_number = recipient.replace(" ", "").replace("-", "")
+        if not bare_phone_number.isdigit():
+            raise ValueError("Numbers only allowed")
+        
+        return True
+    
+    def send(self, recipient, message):
+        try:
+            self.validate_recipient(recipient)
+            
+            # Simulate sending
+            print(f"Sending SMS to: {recipient}")
+            print(f"Message: {message}")
+            
+            return True
+        except (TypeError, ValueError) as error:
+            print(f"Failed to send SMS: {error}")
+            return False
+        except Exception as error:
+            print(f"Unexpected error sending SMS: {error}")
+            return False
+        
+class Recipients(TypedDict):
+    email: str
+    sms: str
+        
+class NotificationManager:
+    def __init__(self) -> None:
+        self._services: List[NotificationService] = []
+        
+    def add_service(self, service: NotificationService):
+        if not isinstance(service, NotificationService):
+            raise TypeError("Send a proper service")
+        
+        self._services.append(service)
+        
+    def remove_service(self, service: NotificationService):
+        if not isinstance(service, NotificationService):
+            raise TypeError("Send a proper service")
+        
+        self._services.remove(service)
+        
+    def notify_all(self, message: str, recipients: Recipients):
+        for service in self._services:
+            if isinstance(service, EmailNotification):
+                service.send(recipient=recipients["email"], message=message)
+            else:
+                service.send(recipient=recipients["sms"], message=message)
+            
+manager = NotificationManager()
+manager.add_service(EmailNotification("user@example.com"))
+manager.add_service(SMSNotification("07777665544"))
+
+manager.notify_all(
+    message="System maintenance in 10 minutes",
+    recipients={
+        "email": "user@example.com",
+        "sms": "1234567890"
+    }
+)
