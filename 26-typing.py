@@ -4,301 +4,301 @@ from numbers import Number
 from dataclasses import dataclass
 from enum import Enum, auto
 
-# # Define a type variable
-# T = TypeVar("T")
+# Define a type variable
+T = TypeVar("T")
 
-# # Generic class that can work with any type
-# class Box(Generic[T]):
-#     def __init__(self, item: T) -> None:
-#         self.item = item
+# Generic class that can work with any type
+class Box(Generic[T]):
+    def __init__(self, item: T) -> None:
+        self.item = item
         
-#     def get_item(self) -> T:
-#         return self.item
+    def get_item(self) -> T:
+        return self.item
     
-#     def set_item(self, item: T) -> None:
-#         self.item = item
+    def set_item(self, item: T) -> None:
+        self.item = item
         
-# # Usage
-# int_box = Box[int](42)
-# str_box = Box[str]("Hello")
+# Usage
+int_box = Box[int](42)
+str_box = Box[str]("Hello")
 
-# K = TypeVar('K')
-# V = TypeVar('V')
+K = TypeVar('K')
+V = TypeVar('V')
 
-# class Pair(Generic[K, V]):
-#     def __init__(self, key: K, value: V) -> None:
-#         self.key = key
-#         self.value = value
+class Pair(Generic[K, V]):
+    def __init__(self, key: K, value: V) -> None:
+        self.key = key
+        self.value = value
         
-#     def get_key(self) -> K:
-#         return self.key
+    def get_key(self) -> K:
+        return self.key
     
-#     def get_value(self) -> V:
-#         return self.value
+    def get_value(self) -> V:
+        return self.value
     
-# # Usage
-# pair = Pair[str, int]("age", 28)
-# name_pair = Pair[str, str]("first_name", "Nik")
+# Usage
+pair = Pair[str, int]("age", 28)
+name_pair = Pair[str, str]("first_name", "Nik")
 
-# # Bounded type variable
-# T = TypeVar("T", bound=Number)
+# Bounded type variable
+T = TypeVar("T", bound=Number)
 
-# class NumericContainer(Generic[T]):
-#     def __init__(self, item: T) -> None:
-#         self.item = item
+class NumericContainer(Generic[T]):
+    def __init__(self, item: T) -> None:
+        self.item = item
         
-#     def get_item(self) -> T:
-#         return self.item
+    def get_item(self) -> T:
+        return self.item
     
-#     def is_positive(self) -> bool:
-#         return self.item > 0
+    def is_positive(self) -> bool:
+        return self.item > 0
     
-# # Valid usage
-# float_container = NumericContainer[float](5.5)
-# int_container = NumericContainer[int](10)
+# Valid usage
+float_container = NumericContainer[float](5.5)
+int_container = NumericContainer[int](10)
 
-# # This would raise a type error:
-# # str_container = NumericContainer[str]("invalid")  # Error: str is not a Number
+# This would raise a type error:
+# str_container = NumericContainer[str]("invalid")  # Error: str is not a Number
 
-# class Entity(Protocol):
-#     id: int
-#     created_at: datetime
+class Entity(Protocol):
+    id: int
+    created_at: datetime
     
-# T = TypeVar("T", bound=Entity)
+T = TypeVar("T", bound=Entity)
 
-# class Repository(Generic[T]):
-#     def __init__(self) -> None:
-#         self._items: Dict[int, T] = {}
+class Repository(Generic[T]):
+    def __init__(self) -> None:
+        self._items: Dict[int, T] = {}
         
-#     def add(self, item: T) -> None:
-#         self._items[item.id] = item
+    def add(self, item: T) -> None:
+        self._items[item.id] = item
         
-#     def get(self, id: int) -> Optional[T]:
-#         return self._items.get(id)
+    def get(self, id: int) -> Optional[T]:
+        return self._items.get(id)
     
-#     def get_all(self) -> List[T]:
-#         return list(self._items.values())
+    def get_all(self) -> List[T]:
+        return list(self._items.values())
     
-#     def delete(self, id: int) -> bool:
-#         if id in self._items:
-#             del self._items[id]
-#             return True
-#         return False
+    def delete(self, id: int) -> bool:
+        if id in self._items:
+            del self._items[id]
+            return True
+        return False
     
-# class User(Entity):
-#     def __init__(self, id: int, name: str, email: str) -> None:
-#         self.id = id
-#         self.name = name
-#         self.email = email
-#         self.created_at = datetime.now()
+class User(Entity):
+    def __init__(self, id: int, name: str, email: str) -> None:
+        self.id = id
+        self.name = name
+        self.email = email
+        self.created_at = datetime.now()
             
-# class Product(Entity):
-#     def __init__(self, id: int, name: str, price: float) -> None:
-#         self.id = id
-#         self.name = name
-#         self.price = price
-#         self.created_at = datetime.now()
+class Product(Entity):
+    def __init__(self, id: int, name: str, price: float) -> None:
+        self.id = id
+        self.name = name
+        self.price = price
+        self.created_at = datetime.now()
         
-# def main() -> None:
-#     # Create a repository for different entity types
-#     user_repository = Repository[User]()
-#     product_repository = Repository[Product]()
+def main() -> None:
+    # Create a repository for different entity types
+    user_repository = Repository[User]()
+    product_repository = Repository[Product]()
     
-#     # Add items
-#     user = User(1, "John Doe", "john.doe@example.com")
-#     product = Product(1, "Laptop", 999.99)
+    # Add items
+    user = User(1, "John Doe", "john.doe@example.com")
+    product = Product(1, "Laptop", 999.99)
     
-#     # Add items
-#     user_repository.add(user)
-#     product_repository.add(product)
+    # Add items
+    user_repository.add(user)
+    product_repository.add(product)
     
-#     # Retrieve items
-#     found_user = user_repository.get(1)
-#     if found_user:
-#         print(f"Found user: {found_user.name}")
+    # Retrieve items
+    found_user = user_repository.get(1)
+    if found_user:
+        print(f"Found user: {found_user.name}")
     
-#     found_product = product_repository.get(1)
-#     if found_product:
-#         print(f"Found product: {found_product.name}, Price: ${found_product.price}")
+    found_product = product_repository.get(1)
+    if found_product:
+        print(f"Found product: {found_product.name}, Price: ${found_product.price}")
         
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
     
-# UserId = int # Simple type alias
-# def get_user(user_id: UserId) -> str:
-#     return f"User {user_id}"
-# print(get_user(42))  # ✅ Works like an int
+UserId = int # Simple type alias
+def get_user(user_id: UserId) -> str:
+    return f"User {user_id}"
+print(get_user(42))  # ✅ Works like an int
 
-# JsonDict: TypeAlias = Dict[str, Union[str, int, float, bool, None]]
-# Coordinate = Tuple[float, float]
-# def get_location() -> Coordinate:
-#     return (40.7128, -74.0060)  # Example GPS coordinates
-# print(get_location())  # (40.7128, -74.0060)
+JsonDict: TypeAlias = Dict[str, Union[str, int, float, bool, None]]
+Coordinate = Tuple[float, float]
+def get_location() -> Coordinate:
+    return (40.7128, -74.0060)  # Example GPS coordinates
+print(get_location())  # (40.7128, -74.0060)
 
-# MathOperation = Callable[[int, int], int]
-# def add(a: int, b: int) -> int:
-#     return a + b
-# def apply_operation(x: int, y: int, operation: MathOperation) -> int:
-#     return operation(x, y)
-# print(apply_operation(2, 3, add)) # 5
+MathOperation = Callable[[int, int], int]
+def add(a: int, b: int) -> int:
+    return a + b
+def apply_operation(x: int, y: int, operation: MathOperation) -> int:
+    return operation(x, y)
+print(apply_operation(2, 3, add)) # 5
 
-# # NewType for unique types
-# AdminId = NewType("AdminId", int)
-# RegularUserId = NewType("RegularUserId", int)
+# NewType for unique types
+AdminId = NewType("AdminId", int)
+RegularUserId = NewType("RegularUserId", int)
 
-# def process_admin(admin_id: AdminId) -> None:
-#     print(f"Processing admin {admin_id}")
+def process_admin(admin_id: AdminId) -> None:
+    print(f"Processing admin {admin_id}")
     
-# def process_user(user_id: RegularUserId) -> None:
-#     print(f"Processing user {user_id}")
+def process_user(user_id: RegularUserId) -> None:
+    print(f"Processing user {user_id}")
     
-# regular_id = RegularUserId(123)
-# admin_id = AdminId(456)
+regular_id = RegularUserId(123)
+admin_id = AdminId(456)
 
-# process_admin(admin_id) # ✅
-# # process_admin(regular_id) # Type error: Expected AdminId, got RegularUserId - despite both being technically int
+process_admin(admin_id) # ✅
+# process_admin(regular_id) # Type error: Expected AdminId, got RegularUserId - despite both being technically int
 
-# T = TypeVar("T")
-# S = TypeVar("S", bound=Sequence[Any])
-# N = TypeVar("N", int, float)
+T = TypeVar("T")
+S = TypeVar("S", bound=Sequence[Any])
+N = TypeVar("N", int, float)
 
-# class DataProcessor(Generic[T]):
-#     def __init__(self, data: T) -> None:
-#         self.data = data
+class DataProcessor(Generic[T]):
+    def __init__(self, data: T) -> None:
+        self.data = data
         
-#     def process(self, func: Callable[[T], T]) -> T:
-#         return func(self.data)
+    def process(self, func: Callable[[T], T]) -> T:
+        return func(self.data)
     
-# def double_value(x: int) -> int:
-#     return x * 2
+def double_value(x: int) -> int:
+    return x * 2
 
-# int_processor = DataProcessor[int](5)
-# result = int_processor.process(double_value)
-# print(f"Processed int: {result}")
+int_processor = DataProcessor[int](5)
+result = int_processor.process(double_value)
+print(f"Processed int: {result}")
     
-# class SequenceProcessor(Generic[S]):
-#     def __init__(self, sequence: S) -> None:
-#         self.sequence = sequence
+class SequenceProcessor(Generic[S]):
+    def __init__(self, sequence: S) -> None:
+        self.sequence = sequence
         
-#     def first(self) -> Any:
-#         return self.sequence[0]
+    def first(self) -> Any:
+        return self.sequence[0]
     
-# list_processor = SequenceProcessor([1, 2, 3])
-# first = list_processor.first()
-# print(f"First element: {first}")
+list_processor = SequenceProcessor([1, 2, 3])
+first = list_processor.first()
+print(f"First element: {first}")
     
-# class NumericCalculator(Generic[N]):
-#     def __init__(self, value: N) -> None:
-#         self.value: N = value
+class NumericCalculator(Generic[N]):
+    def __init__(self, value: N) -> None:
+        self.value: N = value
         
-#     def add(self, other: N) -> N:
-#         return self.value + other
+    def add(self, other: N) -> N:
+        return self.value + other
     
-# int_calc = NumericCalculator(5)
-# float_calc = NumericCalculator(5.5)
-# print(f"Int calc: {int_calc.add(3)}")
-# print(f"Float calc: {float_calc.add(3.2)}")
+int_calc = NumericCalculator(5)
+float_calc = NumericCalculator(5.5)
+print(f"Int calc: {int_calc.add(3)}")
+print(f"Float calc: {float_calc.add(3.2)}")
 
-# class Priority(Enum):
-#     LOW = auto()
-#     MEDIUM = auto()
-#     HIGH = auto()
+class Priority(Enum):
+    LOW = auto()
+    MEDIUM = auto()
+    HIGH = auto()
     
-# T = TypeVar("T")
+T = TypeVar("T")
 
-# class Event(Generic[T]):
-#     def __init__(self, data: T, priority: Priority = Priority.MEDIUM) -> None:
-#         self.data = data
-#         self.priority = priority
-#         self.timestamp = datetime.now()
+class Event(Generic[T]):
+    def __init__(self, data: T, priority: Priority = Priority.MEDIUM) -> None:
+        self.data = data
+        self.priority = priority
+        self.timestamp = datetime.now()
         
-# class EventHandler(Protocol[T]):
-#     def handle(self, event: Event[T]) -> None: ...
+class EventHandler(Protocol[T]):
+    def handle(self, event: Event[T]) -> None: ...
     
-# @dataclass
-# class UserEvent:
-#     user_id: int
-#     action: str
-#     metadata: Dict[str, Any]
+@dataclass
+class UserEvent:
+    user_id: int
+    action: str
+    metadata: Dict[str, Any]
     
-# @dataclass
-# class SystemEvent:
-#     component: str
-#     status: str
-#     details: Optional[str] = None
+@dataclass
+class SystemEvent:
+    component: str
+    status: str
+    details: Optional[str] = None
     
-# class EventBus:
-#     def __init__(self) -> None:
-#         self._handlers: Dict[type, List[EventHandler[Any]]] = {}
-#         self._events: List[Event[Any]] = []
+class EventBus:
+    def __init__(self) -> None:
+        self._handlers: Dict[type, List[EventHandler[Any]]] = {}
+        self._events: List[Event[Any]] = []
         
-#     def register_handler(self, event_type: type, handler: EventHandler[Any]) -> None:
-#         if event_type not in self._handlers:
-#             self._handlers[event_type] = []
-#         self._handlers[event_type].append(handler)
+    def register_handler(self, event_type: type, handler: EventHandler[Any]) -> None:
+        if event_type not in self._handlers:
+            self._handlers[event_type] = []
+        self._handlers[event_type].append(handler)
         
-#     def publish(self, event: Event[Any]) -> None:
-#         self._events.append(event)
-#         event_type = type(event.data)
+    def publish(self, event: Event[Any]) -> None:
+        self._events.append(event)
+        event_type = type(event.data)
         
-#         if event_type in self._handlers:
-#             for handler in self._handlers[event_type]:
-#                 handler.handle(event)
+        if event_type in self._handlers:
+            for handler in self._handlers[event_type]:
+                handler.handle(event)
                 
-#     def get_events_by_priority(self, priority: Priority) -> List[Event[Any]]:
-#         return [event for event in self._events if event.priority == priority]
+    def get_events_by_priority(self, priority: Priority) -> List[Event[Any]]:
+        return [event for event in self._events if event.priority == priority]
     
-# class UserEventHandler(EventHandler[UserEvent]):
-#     def handle(self, event: Event[UserEvent]) -> None:
-#         user_event = event.data
-#         print(f"Handling user event: User {user_event.action} (ID: {user_event.user_id})")
+class UserEventHandler(EventHandler[UserEvent]):
+    def handle(self, event: Event[UserEvent]) -> None:
+        user_event = event.data
+        print(f"Handling user event: User {user_event.action} (ID: {user_event.user_id})")
         
-# class SystemEventHandler(EventHandler[SystemEvent]):
-#     def handle(self, event: Event[SystemEvent]) -> None:
-#         system_event = event.data
-#         print(f"Handling system event: {system_event.component} is {system_event.status}")
+class SystemEventHandler(EventHandler[SystemEvent]):
+    def handle(self, event: Event[SystemEvent]) -> None:
+        system_event = event.data
+        print(f"Handling system event: {system_event.component} is {system_event.status}")
         
-# def main() -> None:
-#     event_bus = EventBus()
+def main() -> None:
+    event_bus = EventBus()
     
-#     event_bus.register_handler(UserEvent, UserEventHandler())
-#     event_bus.register_handler(SystemEvent, SystemEventHandler())
+    event_bus.register_handler(UserEvent, UserEventHandler())
+    event_bus.register_handler(SystemEvent, SystemEventHandler())
     
-#     user_event = Event(
-#         UserEvent(
-#             user_id=1,
-#             action="register",
-#             metadata={"id": "192.168.1.1"}
-#         ),
-#         Priority.HIGH
-#     )
+    user_event = Event(
+        UserEvent(
+            user_id=1,
+            action="register",
+            metadata={"id": "192.168.1.1"}
+        ),
+        Priority.HIGH
+    )
     
-#     user_event_2 = Event(
-#         UserEvent(
-#             user_id=2,
-#             action="login",
-#             metadata={"id": "192.168.1.1"}
-#         ),
-#         Priority.HIGH
-#     )
+    user_event_2 = Event(
+        UserEvent(
+            user_id=2,
+            action="login",
+            metadata={"id": "192.168.1.1"}
+        ),
+        Priority.HIGH
+    )
     
-#     system_event = Event(
-#         SystemEvent(
-#             component="database",
-#             status="connected"
-#         ),
-#         Priority.MEDIUM
-#     )
+    system_event = Event(
+        SystemEvent(
+            component="database",
+            status="connected"
+        ),
+        Priority.MEDIUM
+    )
     
-#     event_bus.publish(user_event)
-#     event_bus.publish(user_event_2)
-#     event_bus.publish(system_event)
+    event_bus.publish(user_event)
+    event_bus.publish(user_event_2)
+    event_bus.publish(system_event)
     
-#     high_priority = event_bus.get_events_by_priority(Priority.HIGH)
-#     print(f"\nHigh priority events: {len(high_priority)}")
+    high_priority = event_bus.get_events_by_priority(Priority.HIGH)
+    print(f"\nHigh priority events: {len(high_priority)}")
     
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
 
 Mode = Literal["r", "w", "a"]
 
