@@ -674,7 +674,7 @@ class QueryBuilder:
         if self._order_by:
             order_by_conditions: List[str] = []
             
-            for condition in self._order_by:
+            for condition in self._order_by: # type: ignore
                 if isinstance(condition, str):
                     order_by_conditions.append(condition)
                 elif isinstance(condition, OrderBySelector):
