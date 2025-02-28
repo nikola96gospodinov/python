@@ -122,6 +122,7 @@ async def main():
     try:
         await client.connect()
         result = await client.get_user_repos("nikola96gospodinov")
+        print(result)
     except RateLimitExceeded:
         logger.error("Rate limit exceeded, try again later")
     except Exception as e:
